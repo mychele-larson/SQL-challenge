@@ -1,4 +1,4 @@
-# sql-challenge
+## SQL CHALLENGE
 SQL Homework Assignment
 
 Module 9 Challenge
