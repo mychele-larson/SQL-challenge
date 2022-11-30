@@ -1,69 +1,93 @@
 -- DATA ANALYSIS
 
--- List the employee number, last name, first name, gender, and salary of all employees.
+-- 1. List the employee number, last name, first name, gender, and salary of all employees.
 
-SELECT employees.emp_no, employees.last_name, employees.first_name, employees.sex, salaries.salary
-FROM employees
-JOIN salaries ON
-employees.emp_no = salaries.emp_no;
+SELECT 
+	e.emp_no, 
+	e.last_name, 
+	e.first_name, 
+	e.sex, 
+	s.salary
+from employees e
+	JOIN salaries s ON e.emp_no = s.emp_no;
 
--- List the first name, last name and hire date for employees hired in 1986
+-- 2. List the first name, last name and hire date for employees hired in 1986
 
-SELECT first_name, last_name, hire_date 
-FROM employees
-WHERE hire_date <= '12/31/1986'
-AND hire_date >= '01/01/1986';
+SELECT 
+	e.first_name, 
+	e.last_name,
+	e.hire_date 
+FROM employees e
+WHERE e.hire_date <= '12/31/1986' AND e.hire_date >= '01/01/1986';
 
--- List the manager name and dept number, dept name, employee number, last name & first name.
+-- 3. List the manager name and dept number, dept name, employee number, last name & first name.
 
-SELECT dept_manager.emp_no,
-		departments.dept_name,
-		departments.dept_no,
-		employees.emp_no,
-		employees.last_name,
-		employees.first_name
-FROM dept_manager
-LEFT JOIN departments ON
-dept_manager.dept_no = departments.dept_no
-LEFT JOIN employees ON
-dept_manager.emp_no = employees.emp_no;
+SELECT 
+	dm.emp_no,
+	d.dept_name,
+	d.dept_no,
+	e.emp_no,
+	e.last_name,
+	e.first_name
+FROM dept_manager dm
+	JOIN departments d ON dm.dept_no = d.dept_no
+	JOIN employees e ON dm.emp_no = e.emp_no;
 
 
--- List the dept number, employee number, last name, first name and department name for each employee
+-- 4. List the dept number, employee number, last name, first name and department name for each employee
 
-SELECT employees.emp_no, 
-		employees.last_name, 
-		employees.first_name, 
-		departments.dept_name,
-		dept_manager.dept_no
-FROM employees
-RIGHT JOIN dept_manager ON
-employees.emp_no = dept_manager.emp_no
-RIGHT JOIN departments ON
-dept_manager.dept_no = departments.dept_no;
+SELECT 
+	e.emp_no, 
+	e.last_name, 
+	e.first_name, 
+	d.dept_name,
+	dm.dept_no
+FROM employees e
+	JOIN dept_manager dm ON e.emp_no = dm.emp_no
+	JOIN departments d ON dm.dept_no = d.dept_no;
 
--- List first name, last name and gender of employee with first name "Hercules" and last name begins with "B"
+-- 5. List first name, last name and gender of employee with first name "Hercules" and last name begins with "B"
 
-SELECT * FROM employees
-WHERE first_name = 'Hercules'
-AND last_name LIKE 'B%'
+SELECT 
+	e.first_name,
+	e.last_name,
+	e.sex
+from employees e
+WHERE e.first_name = 'Hercules' AND e.last_name LIKE 'B%'
 AND sex IS NOT NULL;
 
--- List all employees in Sales Department-including employee number, first name and last name
+-- 6. List all employees in Sales Department-including employee number, first name and last name
 
-SELECT e.emp_no, e.last_name, e.first_name, d.dept_name
-FROM employees AS e
-INNER JOIN dept_emp ON
-e.emp_no = dept_emp.emp_no
-INNER JOIN departments AS d ON
-dept_emp.dept_no = d.dept_no
-WHERE dept_name = 'Sales' OR
-		dept_name = 'Development';
-		
-		
--- List frequency counts (descending order) of all employee last names
+SELECT 
+	e.emp_no, 
+	e.last_name, 
+	e.first_name, 
+	d.dept_name
+FROM employees e
+	JOIN dept_emp de ON de.emp_no = e.emp_no
+	JOIN departments d ON d.dept_no = de.dept_no
+WHERE d.dept_name = 'Sales';
+	
+	
+-- 7. List each employee in Sales & Development depts including employee number, first name, last name, 
+--	and department name.
 
-SELECT last_name, COUNT(last_name) FROM employees
-GROUP BY last_name
-ORDER BY count(last_name) desc;
+SELECT 
+	e.emp_no, 
+	e.last_name, 
+	e.first_name, 
+	d.dept_name
+FROM employees e
+	JOIN dept_emp de ON de.emp_no = e.emp_no
+	JOIN departments d ON d.dept_no = de.dept_no
+WHERE d.dept_name = 'Sales' OR	d.dept_name = 'Development';
+
+-- 8. List frequency counts (descending order) of all employee last names
+
+SELECT 
+	e.last_name, COUNT(e.last_name) FROM employees e
+GROUP BY 
+	e.last_name
+ORDER BY 
+	count(e.last_name) desc;
 		
