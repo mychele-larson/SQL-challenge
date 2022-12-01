@@ -9,7 +9,7 @@ SELECT
 	e.sex, 
 	s.salary
 from employees e
-	JOIN salaries s ON e.emp_no = s.emp_no;
+	INNER JOIN salaries s ON e.emp_no = s.emp_no;
 
 -- 2. List the first name, last name and hire date for employees hired in 1986
 
@@ -23,15 +23,14 @@ WHERE e.hire_date <= '12/31/1986' AND e.hire_date >= '01/01/1986';
 -- 3. List the manager name and dept number, dept name, employee number, last name & first name.
 
 SELECT 
-	dm.emp_no,
-	d.dept_name,
 	d.dept_no,
-	e.emp_no,
+	d.dept_name,
+	dm.emp_no,
 	e.last_name,
 	e.first_name
-FROM dept_manager dm
-	JOIN departments d ON dm.dept_no = d.dept_no
-	JOIN employees e ON dm.emp_no = e.emp_no;
+FROM departments d
+	INNER JOIN dept_manager dm ON dm.dept_no = d.dept_no
+	INNER JOIN employees e ON e.emp_no = dm.emp_no;
 
 
 -- 4. List the dept number, employee number, last name, first name and department name for each employee
@@ -40,12 +39,12 @@ SELECT
 	e.emp_no, 
 	e.last_name, 
 	e.first_name, 
-	d.dept_name,
-	dm.dept_no
+	d.dept_name
 FROM employees e
-	JOIN dept_manager dm ON e.emp_no = dm.emp_no
-	JOIN departments d ON dm.dept_no = d.dept_no;
-
+	LEFT JOIN dept_emp de ON de.emp_no = e.emp_no
+	INNER JOIN departments d ON d.dept_no = de.dept_no;
+	
+	
 -- 5. List first name, last name and gender of employee with first name "Hercules" and last name begins with "B"
 
 SELECT 
@@ -64,11 +63,11 @@ SELECT
 	e.first_name, 
 	d.dept_name
 FROM employees e
-	JOIN dept_emp de ON de.emp_no = e.emp_no
-	JOIN departments d ON d.dept_no = de.dept_no
+	INNER JOIN dept_emp de ON de.emp_no = e.emp_no
+	INNER JOIN departments d ON d.dept_no = de.dept_no
 WHERE d.dept_name = 'Sales';
-	
-	
+
+
 -- 7. List each employee in Sales & Development depts including employee number, first name, last name, 
 --	and department name.
 
@@ -78,8 +77,8 @@ SELECT
 	e.first_name, 
 	d.dept_name
 FROM employees e
-	JOIN dept_emp de ON de.emp_no = e.emp_no
-	JOIN departments d ON d.dept_no = de.dept_no
+	INNER JOIN dept_emp de ON de.emp_no = e.emp_no
+	INNER JOIN departments d ON d.dept_no = de.dept_no
 WHERE d.dept_name = 'Sales' OR	d.dept_name = 'Development';
 
 -- 8. List frequency counts (descending order) of all employee last names
